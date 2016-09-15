@@ -1,4 +1,7 @@
+// ид элементов, выбранных по умолчнию
 var elements_id = [1, 3, 1];
+
+// список доступных элементов
 var elements_list = [
     {
         id: 6,
@@ -38,6 +41,7 @@ var Element = React.createClass({
         this.setState({
             selected_id: new_value
         }, function() {
+            // вызов callBack функии с параметрами (см. Elements.changeChildElem)
             rc_that.props.callBackParent(new_value, rc_that.props.element.item_id);
         });
 
@@ -48,9 +52,6 @@ var Element = React.createClass({
                 <option key={index + 1} value={item.id}>{ item.value}</option>
             );
         });
-        /*options.unshift(
-            <option key="0" value="-1">Значение не выбрано</option>
-        );*/
         return (
             <div className='number'>
                 <select type="text" value={this.state.selected_id} onChange={this.valueChange}>
@@ -80,9 +81,11 @@ var Elements = React.createClass({
             })
         };
     },
+    // после того, как было выбрано другое значение в Element, будет запущена эта функция (см. Element.callBackParent)
     changeChildElem: function(elem_id, item_id) {
         var rc_that = this;
         this.setState({
+            // обновление элементов. Если это элемент, значение которого было изменено в потомке, то оно изменяется и тут
             elements: this.state.elements.map(function(element) {
                 if (element.item_id == item_id) {
                     var elem = elementSearchByItemId(rc_that.props.elements_list, elem_id);
@@ -95,22 +98,12 @@ var Elements = React.createClass({
                 return element;
             })
         }, function() {
+            // после того, как были обновлены elements, необходимо пересчитать сумму
             rc_that.setState({
                 sum: _.sumBy(rc_that.state.elements, function(item) {
                     return (item.value);
                 })
             });
-        });
-    },
-    addElem: function() {
-        //var new_number = prompt('Введите значение новго элемента');
-        this.state.elements.push({
-            elem_id: 6,
-            item_id: this.state.elements.length - 1,
-            value: 0
-        });
-        this.setState({
-            elements: this.state.elements
         });
     },
     render: function() {
@@ -124,7 +117,6 @@ var Elements = React.createClass({
             <div className='root-class'>
                 <h1> Cумма = {this.state.sum}</h1>
                 {rc_elements}
-                <input type='button' value='Добавить элемент' onClick={this.addElem} />
             </div>
         );
     }

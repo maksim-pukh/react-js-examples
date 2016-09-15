@@ -6080,7 +6080,7 @@
                 },
 
                 /**
-                 * Lazily allocates the refs object and stores `component` as `ref`.
+                 * Lazily allocates the callBacks object and stores `component` as `ref`.
                  *
                  * @param {string} ref Reference name.
                  * @param {component} component Component to store as `ref`.
@@ -6089,11 +6089,11 @@
                  */
                 attachRef: function (ref, component) {
                     var inst = this.getPublicInstance();
-                    !(inst != null) ? "development" !== 'production' ? invariant(false, 'Stateless function components cannot have refs.') : invariant(false) : undefined;
+                    !(inst != null) ? "development" !== 'production' ? invariant(false, 'Stateless function components cannot have callBacks.') : invariant(false) : undefined;
                     var publicComponentInstance = component.getPublicInstance();
                     if ("development" !== 'production') {
                         var componentName = component && component.getName ? component.getName() : 'a component';
-                        "development" !== 'production' ? warning(publicComponentInstance != null, 'Stateless function components cannot be given refs ' + '(See ref "%s" in %s created by %s). ' + 'Attempts to access this ref will fail.', ref, componentName, this.getName()) : undefined;
+                        "development" !== 'production' ? warning(publicComponentInstance != null, 'Stateless function components cannot be given callBacks ' + '(See ref "%s" in %s created by %s). ' + 'Attempts to access this ref will fail.', ref, componentName, this.getName()) : undefined;
                     }
                     var refs = inst.refs === emptyObject ? inst.refs = {} : inst.refs;
                     refs[ref] = publicComponentInstance;
@@ -6125,7 +6125,7 @@
 
                 /**
                  * Get the publicly accessible representation of this component - i.e. what
-                 * is exposed by refs and returned by render. Can be null for stateless
+                 * is exposed by callBacks and returned by render. Can be null for stateless
                  * components.
                  *
                  * @return {ReactComponent} the public component instance.
@@ -12479,14 +12479,14 @@
  *       );
  *     },
  *     handleClick: function() {
- *       this.refs.custom.handleClick();
+ *       this.callBacks.custom.handleClick();
  *     },
  *     componentDidMount: function() {
- *       this.refs.custom.initialize();
+ *       this.callBacks.custom.initialize();
  *     }
  *   });
              *
-             * Refs should rarely be used. When refs are used, they should only be done to
+             * Refs should rarely be used. When callBacks are used, they should only be done to
              * control data that is not handled by React's data flow.
              *
              * @class ReactOwner
@@ -12512,7 +12512,7 @@
                  * @internal
                  */
                 addComponentAsRefTo: function (component, ref, owner) {
-                    !ReactOwner.isValidOwner(owner) ? "development" !== 'production' ? invariant(false, 'addComponentAsRefTo(...): Only a ReactOwner can have refs. You might ' + 'be adding a ref to a component that was not created inside a component\'s ' + '`render` method, or you have multiple copies of React loaded ' + '(details: https://fb.me/react-refs-must-have-owner).') : invariant(false) : undefined;
+                    !ReactOwner.isValidOwner(owner) ? "development" !== 'production' ? invariant(false, 'addComponentAsRefTo(...): Only a ReactOwner can have callBacks. You might ' + 'be adding a ref to a component that was not created inside a component\'s ' + '`render` method, or you have multiple copies of React loaded ' + '(details: https://fb.me/react-callBacks-must-have-owner).') : invariant(false) : undefined;
                     owner.attachRef(ref, component);
                 },
 
@@ -12526,7 +12526,7 @@
                  * @internal
                  */
                 removeComponentAsRefFrom: function (component, ref, owner) {
-                    !ReactOwner.isValidOwner(owner) ? "development" !== 'production' ? invariant(false, 'removeComponentAsRefFrom(...): Only a ReactOwner can have refs. You might ' + 'be removing a ref to a component that was not created inside a component\'s ' + '`render` method, or you have multiple copies of React loaded ' + '(details: https://fb.me/react-refs-must-have-owner).') : invariant(false) : undefined;
+                    !ReactOwner.isValidOwner(owner) ? "development" !== 'production' ? invariant(false, 'removeComponentAsRefFrom(...): Only a ReactOwner can have callBacks. You might ' + 'be removing a ref to a component that was not created inside a component\'s ' + '`render` method, or you have multiple copies of React loaded ' + '(details: https://fb.me/react-callBacks-must-have-owner).') : invariant(false) : undefined;
                     // Check that `component` is still the current ref because we do not want to
                     // detach the ref if another component stole it.
                     if (owner.getPublicInstance().refs[ref] === component.getPublicInstance()) {
@@ -13370,7 +13370,7 @@
 
                 // TODO: Should this even be possible? The owner cannot change because
                 // it's forbidden by shouldUpdateReactComponent. The ref can change
-                // if you swap the keys of but not the refs. Reconsider where this check
+                // if you swap the keys of but not the callBacks. Reconsider where this check
                 // is made. It probably belongs where the key checking and
                 // instantiateReactComponent is done.
 
@@ -13688,7 +13688,7 @@
                     if ("development" !== 'production') {
                         var owner = ReactCurrentOwner.current;
                         if (owner !== null) {
-                            "development" !== 'production' ? warning(owner._warnedAboutRefsInRender, '%s is accessing isMounted inside its render() function. ' + 'render() should be a pure function of props and state. It should ' + 'never access something that requires stale data from the previous ' + 'render, such as refs. Move this logic to componentDidMount and ' + 'componentDidUpdate instead.', owner.getName() || 'A component') : undefined;
+                            "development" !== 'production' ? warning(owner._warnedAboutRefsInRender, '%s is accessing isMounted inside its render() function. ' + 'render() should be a pure function of props and state. It should ' + 'never access something that requires stale data from the previous ' + 'render, such as callBacks. Move this logic to componentDidMount and ' + 'componentDidUpdate instead.', owner.getName() || 'A component') : undefined;
                             owner._warnedAboutRefsInRender = true;
                         }
                     }
@@ -16382,7 +16382,7 @@
                 if ("development" !== 'production') {
                     var owner = ReactCurrentOwner.current;
                     if (owner !== null) {
-                        "development" !== 'production' ? warning(owner._warnedAboutRefsInRender, '%s is accessing getDOMNode or findDOMNode inside its render(). ' + 'render() should be a pure function of props and state. It should ' + 'never access something that requires stale data from the previous ' + 'render, such as refs. Move this logic to componentDidMount and ' + 'componentDidUpdate instead.', owner.getName() || 'A component') : undefined;
+                        "development" !== 'production' ? warning(owner._warnedAboutRefsInRender, '%s is accessing getDOMNode or findDOMNode inside its render(). ' + 'render() should be a pure function of props and state. It should ' + 'never access something that requires stale data from the previous ' + 'render, such as callBacks. Move this logic to componentDidMount and ' + 'componentDidUpdate instead.', owner.getName() || 'A component') : undefined;
                         owner._warnedAboutRefsInRender = true;
                     }
                 }
