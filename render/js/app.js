@@ -1,3 +1,4 @@
+// обязательно с большой буквы
 var Greetings = React.createClass({
     render: function() {
         // какие-нибудь действия
