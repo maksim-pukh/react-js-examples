@@ -29,12 +29,13 @@ var Element = React.createClass({
         };
     },
     valueChange: function(e) {
-        var rc_that = this;
+        /*var rc_that = this;
         this.setState({
             selected_id: e.target.value
         }, function() {
-            rc_that.props.callBackParent();
-        });
+            rc_that.props.callBackParent(e.target);
+        });*/
+        this.props.callBackParent(e.target.value, this.props.element.item_id);
     },
     render: function() {
         var options = this.props.elements_list.map(function(item, index) {
@@ -61,9 +62,10 @@ var Elements = React.createClass({
         var initial_elements = [];
         var rc_that = this;
         _.forEach(this.props.elements_id, function(id_item, id_index) {
-            var elem = _.findLast(rc_that.props.elements_list, function(list_item) {
+            /*var elem = _.findLast(rc_that.props.elements_list, function(list_item) {
                 return (list_item.id === id_item);
-            });
+            });*/
+            var elem = elementSearchByItemId(rc_that.props.elements_list, id_item);
             initial_elements.push({
                 elem_id: elem.id,
                 item_id: id_index,
@@ -77,8 +79,8 @@ var Elements = React.createClass({
             })
         };
     },
-    changeChildElem: function() {
-        var rc_that = this;
+    changeChildElem: function(elem_id, item_id) {
+        /*var rc_that = this;
         console.log(rc_that.refs);
         var _sum = 0;
         _.forEach(rc_that.refs, function(item, index) {
@@ -89,6 +91,21 @@ var Elements = React.createClass({
         });
         this.setState({
             sum: _sum
+        });*/
+        console.log('item_id: ' + item_id + ' elem_id: ' + elem_id);
+        var rc_that = this;
+        this.setState({
+            elements: this.state.elements.map(function(element) {
+                if (element.item_id == item_id) {
+                    var elem = elementSearchByItemId(rc_that.props.elements_list, elem_id);
+                    return {
+                        elem_id: elem.id,
+                        item_id: item_id,
+                        value: elem.value
+                    };
+                }
+                return element;
+            })
         });
     },
     addElem: function() {
@@ -119,3 +136,9 @@ ReactDOM.render(
     <Elements elements_id={elements_id} elements_list={elements_list}/>,
     document.getElementsByClassName('js-react')[0]
 );
+
+function elementSearchByItemId(list, id) {
+    return  _.findLast(list, function(list_item) {
+        return (list_item.id == id);
+    });
+}
