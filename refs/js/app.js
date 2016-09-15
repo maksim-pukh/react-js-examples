@@ -1,6 +1,10 @@
 var elements_id = [1, 3, 1];
 var elements_list = [
     {
+        id: 6,
+        value: 0
+    },
+    {
         id: 1,
         value: 1
     },
@@ -29,24 +33,24 @@ var Element = React.createClass({
         };
     },
     valueChange: function(e) {
-        /*var rc_that = this;
+        var rc_that = this;
+        var new_value = e.target.value;
         this.setState({
-            selected_id: e.target.value
+            selected_id: new_value
         }, function() {
-            rc_that.props.callBackParent(e.target);
-        });*/
-        this.props.callBackParent(e.target.value, this.props.element.item_id);
+            rc_that.props.callBackParent(new_value, rc_that.props.element.item_id);
+        });
+
     },
     render: function() {
         var options = this.props.elements_list.map(function(item, index) {
             return (
                 <option key={index + 1} value={item.id}>{ item.value}</option>
             );
-
-            options.unshift(
-                <option key="0" value="-1">Значение не выбрано</option>
-            );
         });
+        /*options.unshift(
+            <option key="0" value="-1">Значение не выбрано</option>
+        );*/
         return (
             <div className='number'>
                 <select type="text" value={this.state.selected_id} onChange={this.valueChange}>
@@ -62,9 +66,6 @@ var Elements = React.createClass({
         var initial_elements = [];
         var rc_that = this;
         _.forEach(this.props.elements_id, function(id_item, id_index) {
-            /*var elem = _.findLast(rc_that.props.elements_list, function(list_item) {
-                return (list_item.id === id_item);
-            });*/
             var elem = elementSearchByItemId(rc_that.props.elements_list, id_item);
             initial_elements.push({
                 elem_id: elem.id,
@@ -80,19 +81,6 @@ var Elements = React.createClass({
         };
     },
     changeChildElem: function(elem_id, item_id) {
-        /*var rc_that = this;
-        console.log(rc_that.refs);
-        var _sum = 0;
-        _.forEach(rc_that.refs, function(item, index) {
-            console.log(item);
-                _sum += _.findLast(rc_that.props.elements_list, function(list_item) {
-                    return (list_item.id === item.state.selected_id);
-                });
-        });
-        this.setState({
-            sum: _sum
-        });*/
-        console.log('item_id: ' + item_id + ' elem_id: ' + elem_id);
         var rc_that = this;
         this.setState({
             elements: this.state.elements.map(function(element) {
@@ -106,11 +94,21 @@ var Elements = React.createClass({
                 }
                 return element;
             })
+        }, function() {
+            rc_that.setState({
+                sum: _.sumBy(rc_that.state.elements, function(item) {
+                    return (item.value);
+                })
+            });
         });
     },
     addElem: function() {
-       var new_number = prompt('Введите значение новго элемента');
-        this.state.elements.push(new_number);
+        //var new_number = prompt('Введите значение новго элемента');
+        this.state.elements.push({
+            elem_id: 6,
+            item_id: this.state.elements.length - 1,
+            value: 0
+        });
         this.setState({
             elements: this.state.elements
         });
