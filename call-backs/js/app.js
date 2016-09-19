@@ -85,7 +85,7 @@ var Elements = React.createClass({
     changeChildElem: function(elem_id, item_id) {
         var rc_that = this;
         this.setState({
-            // обновление элементов. Если это элемент, значение которого было изменено в потомке, то оно изменяется и тут
+            // обновление элементов. Если это элемент, значение которого было изменено в потомке, то его значение изменяется и тут
             elements: this.state.elements.map(function(element) {
                 if (element.item_id == item_id) {
                     var elem = elementSearchByItemId(rc_that.props.elements_list, elem_id);
